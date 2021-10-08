@@ -1,9 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {GlobalStyle} from './components/GlobalStyle/styles'
-import {Provider} from 'react-redux'
 import store from './store'
+import {Provider} from 'react-redux'
 import Home from './views/Home';
 import Header from './components/Header';
+
 const App = ()=>(
     <>
         <Provider store={store}>

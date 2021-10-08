@@ -3,6 +3,7 @@ import { format_date, QueryParams} from '../../utils'
 import PacienteModal from '../PacinenteModal'
 import {Card, CardBody, FormGroup, Search, Sort, Table, TdAction} from './styles'
 import { useSelector, useDispatch } from 'react-redux'
+import {patientAction} from '../../store/action/patientAction' 
 import {ReactComponent as IconSort} from '../../assets/img/sort.svg'
 import {ReactComponent as IconEye} from '../../assets/img/eye.svg'
 import ShareSystem  from '../ShareSystem'
@@ -11,7 +12,7 @@ const natList = ['AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE
 
 const PatienteList = ()=>{
 
-    const list = useSelector(state=>state.patient)
+    const {patient:list} = useSelector(state=>state.patientsReducer)
 
     const dispatch = useDispatch()
     //const [list, setList] = useState([])
@@ -64,9 +65,10 @@ const PatienteList = ()=>{
                 const {results, info} = res
                 
                 if(page==1){
-                    dispatch({type:'ADD_PATIENT', patient:results})
+                    dispatch(patientAction(results))
                 } else {
-                    dispatch({type:'ADD_PATIENT', patient:[...list, ...results]})
+                    let patients = [...list, ...results]
+                    dispatch(patientAction(patients))
                 }
                 setInfo(info)
                 if(query.id){
@@ -105,7 +107,8 @@ const PatienteList = ()=>{
             else      
                 return b.name.first.localeCompare(a.name.first);   
         })
-        dispatch({type:'ADD_PATIENT',patient:list_order})
+        //dispatch({type:'ADD_PATIENT',patient:list_order})
+        dispatch(patientAction(list_order))
         setIsSort(!is_sort)
     }
 
@@ -176,7 +179,6 @@ const PatienteList = ()=>{
                                         Página {params_query.pg}
                                     </span>
                                 </div>
-
                             }
                             <p>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt repudiandae cum iusto id provident ea nostrum officiis similique maiores corrupti vitae, fugit repellendus adipisci. Saepe debitis ut praesentium veritatis.
@@ -222,7 +224,7 @@ const PatienteList = ()=>{
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {list.filter(Filters).map((item, index)=>(
+                                        {list && list.filter(Filters).map((item, index)=>(
                                             <tr key={index}>
                                                 <td>{index+1}</td>
                                                 <td dangerouslySetInnerHTML={{__html:Highlight(`${item.name.first} ${item.name.last}`)}}></td>

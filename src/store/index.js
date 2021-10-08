@@ -1,27 +1,7 @@
-import { createStore } from 'redux'
+import { createStore } from 'redux';
 
-const INITIAL_STATE={
-    patient:[]
-}
+import rootReducer from './reducers';
 
-function patients (state=INITIAL_STATE, action){
-    
-    switch (action.type) {
-        case 'ADD_PATIENT':
-          return {
-            ...state,
-            patient:action.patient
-          }
-        
-    
-        case 'DELETE_PATIENT':
-          return INITIAL_STATE;
-    
-        default:
-          return state;
-      }
-}
+const store = createStore(rootReducer);
 
-const store = createStore(patients)
-
-export default store
+export default store;
